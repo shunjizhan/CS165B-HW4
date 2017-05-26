@@ -1,4 +1,5 @@
 import sys
+from numpy import matrix
 
 def toF(array):
   return [float(x) for x in array]
@@ -22,7 +23,7 @@ def findCentroids(data, dimension):
   for a in range (0, dimension):
     centroid.append(theSum[a] / pointCount)
 
-  return centroid
+  return matrix(centroid)
 
 
 
@@ -39,7 +40,22 @@ trainingData = trainingData[1:]
 
 # print type(N)
 
-print findCentroids(trainingData, N)
+centroid =  findCentroids(trainingData, N)
+trainingData = matrix(trainingData)
+Cov = (trainingData.T * trainingData) / M - centroid.T * centroid
+
+print centroid
+
+
+
+
+
+
+
+
+
+
+
 
 
 
