@@ -43,22 +43,40 @@ trainingData = trainingData_pos + trainingData_neg
 
 K_matrix = [[K(matrix(trainingData[i]), matrix(trainingData[j]), sigma) for j in range(M)] for i in range(M)]
 Y = [1] * M_pos + [-1] * M_neg
-# print K_matrix
-print kernalPerceptron(trainingData, K_matrix, Y)
+alpha = kernalPerceptron(trainingData, K_matrix, Y)
+
+print "Alphas: ",
+for i in range(len(alpha)):
+  print alpha[i],
+print " "
 
 ##### testing
-testingData_pos = readFile(sys.argv[2])
-testingData_neg = readFile(sys.argv[3])
+testingData_pos = readFile(sys.argv[4])
+testingData_neg = readFile(sys.argv[5])
 
 M_test_pos = int(testingData_pos[0][0])
 M_test_neg = int(testingData_neg[0][0])
 N_test_pos = int(testingData_pos[0][1])
 N_test_neg = int(testingData_neg[0][1])
+M_test = M_test_neg + M_test_pos
 
 testingData_pos = testingData_pos[1:]
 testingData_neg = testingData_neg[1:]
+testingData = testingData_pos + testingData_neg
 
+FP = 0
+FN = 0
+for i in range(M_test_pos):
+  if (sum([alpha[i] * Y[i] * K(x, matrix(testingData_pos[i]), sigma) for x in testingData]) <= 0):
+    FN += 1
 
+for j in range(M_test_neg):
+  if (sum([alpha[j] * Y[j] * K(y, matrix(testingData_neg[j]), sigma) for y in testingData]) >= 0):
+    FP += 1
+
+print "False positives: ", FP
+print "False negatives: ", FN
+print "Error rate: ", str((FP + FN) * 100.0 / M) + "%"
 
 
 
