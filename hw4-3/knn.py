@@ -9,6 +9,28 @@ def readFile(filename):
   lines = [toF(line.rstrip('\n').rstrip('\r').split()) for line in open(filename)]
   return lines
 
+def findLargestIndex(knn):
+  index = 0
+  maxDist = knn[0]["distance"]
+  for i in range(1, len(knn)):
+    if (knn[i]["distance"] > maxDist):
+      index = i
+      maxDist = knn[i]["distance"]
+  return index
+
+def printKNN(knn):
+  for i in range(len(knn)):
+    knn[i]["point"].show()
+  print " "
+
+def printLabels(labels):
+  for label in labels:
+    print "label = ", label,
+    for x in labels[label]:
+      print x, "=", labels[label][x],
+    print ""
+  print " "
+
 class Point:
   def __init__(self, description):
     description = [float(x) for x in description]
@@ -20,8 +42,14 @@ class Point:
       print self.coordinate[i],
     print " -- ", self.label
 
+  def distance(self, p):
+    sum = 0
+    for i in range(len(self.coordinate)):
+      sum += (self.coordinate[i] - p.coordinate[i])**2
+    return sqrt(sum)
+
 ##### training
-trainingData = readFile(sys.argv[1])
+trainingData = readFile(sys.argv[2])
 M = int(trainingData[0][0])
 N = int(trainingData[0][1])
 trainingData = trainingData[1:]
@@ -30,18 +58,43 @@ Points = []
 for i in range(M):
   Points.append(Point(trainingData[i]))
 
-for j in range(M):
-  Points[j].show()
-
 ##### testing
-testingData = readFile(sys.argv[2])
+n = int(sys.argv[1])
+testingData = readFile(sys.argv[3])
 M_test = int(testingData[0][0])
 N_test = int(testingData[0][1])
 testingData = testingData[1:]
 
+for x in range(M_test):
+  currentPoint = Point(testingData[x] + [0.0])
+  knn = []
+  for i in range(n):
+    comparePoint = Points[i]
+    knn.append({"point": comparePoint, "distance": comparePoint.distance(currentPoint)}) # initial closest points
+  largestIndex = findLargestIndex(knn)
 
+  for j in range(n, M):
+    maxDist = knn[largestIndex]
+    comparePoint = Points[j]
+    if (comparePoint.distance(currentPoint) < maxDist):   # found closer point and finalize knn
+      knn[largestIndex] = { "point": comparePoint, "distance": comparePoint.distance(currentPoint) }
+      largestIndex = findLargestIndex(knn)
 
+  # determine the predicted label accroding to knn
+  labels = {}
+  for i in range(len(knn)):
+    p = knn[i]
+    label = p["point"].label
+    distance = p["distance"]
 
+    if (label in labels):
+      labels[label]["count"] += 1
+      if (distance < labels[label]["minDist"]):
+        labels[label]["minDist"] = distance
+    else:
+      labels[label] = { "count": 1, "minDist": distance }
+
+  printLabels(labels)
 
 
 
