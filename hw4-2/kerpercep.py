@@ -9,7 +9,7 @@ def readFile(filename):
   lines = [toF(line.rstrip('\n').rstrip('\r').split()) for line in open(filename)]
   return lines
 
-def K(x1, x2, sigma):
+def K(x1, x2, sigma):     # compute kernal
   return exp(-1.0 * ((x1-x2) * (x1-x2).T) / 2.0 * sigma**2)
 
 def kernalPerceptron(D, K, Y):
@@ -41,6 +41,7 @@ trainingData_pos = trainingData_pos[1:]
 trainingData_neg = trainingData_neg[1:]
 trainingData = trainingData_pos + trainingData_neg
 
+# compute kernal and alpha
 K_matrix = [[K(matrix(trainingData[i]), matrix(trainingData[j]), sigma) for j in range(M)] for i in range(M)]
 Y = [1] * M_pos + [-1] * M_neg
 alpha = kernalPerceptron(trainingData, K_matrix, Y)
