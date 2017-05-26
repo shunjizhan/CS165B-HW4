@@ -40,7 +40,8 @@ class Point:
   def show(self):
     for i in range(len(self.coordinate)):
       print self.coordinate[i],
-    print " -- ", self.label
+    # print " -- ", self.label,
+    print " -- ",
 
   def distance(self, p):
     sum = 0
@@ -74,13 +75,15 @@ for x in range(M_test):
   largestIndex = findLargestIndex(knn)
 
   for j in range(n, M):
-    maxDist = knn[largestIndex]
+    maxDist = knn[largestIndex]["distance"]
     comparePoint = Points[j]
+    # print comparePoint.distance(currentPoint), "<", maxDist
     if (comparePoint.distance(currentPoint) < maxDist):   # found closer point and finalize knn
       knn[largestIndex] = { "point": comparePoint, "distance": comparePoint.distance(currentPoint) }
       largestIndex = findLargestIndex(knn)
 
-  # determine the predicted label accroding to knn
+  # determine the predicted label according to knn
+  # printKNN(knn)
   labels = {}
   for i in range(len(knn)):
     p = knn[i]
@@ -94,7 +97,21 @@ for x in range(M_test):
     else:
       labels[label] = { "count": 1, "minDist": distance }
 
-  printLabels(labels)
+  # printLabels(labels)
+  maxCount = -1
+  prediction = -1
+  minDist = 999999999999
+  for label in labels:
+    count = labels[label]["count"]
+    dist = labels[label]["minDist"]
+    if (count > maxCount or (count == maxCount and dist < minDist)):
+      maxCount = count
+      prediction = label
+      minDist = dist
+  print str(x + 1) + ".",
+  currentPoint.show()
+  print int(prediction)
+
 
 
 
