@@ -19,10 +19,9 @@ def kernalPerceptron(D, K, Y):
   while(converged == False):
     converged = True
     for i in range(n):
-      print K[i][j]
-      # if (Y[i] * sum([a[j] * Y[j] * K[i][j] for j in range(n)]) <= 0):
-      #   a[i] = a[i] + 1
-      #   converged = False
+      if (Y[i] * sum([a[j] * Y[j] * K[i][j] for j in range(n)]) <= 0):
+        a[i] = a[i] + 1
+        converged = False
   return a
 
 ##### training
@@ -42,9 +41,9 @@ trainingData_pos = trainingData_pos[1:]
 trainingData_neg = trainingData_neg[1:]
 trainingData = trainingData_pos + trainingData_neg
 
-K_matrix = [[K(matrix(trainingData[i]), matrix(trainingData[j]), sigma) for j in range(10)] for i in range(10)]
-Y = [1] * M_pos + [0] * M_neg
-print K_matrix
+K_matrix = [[K(matrix(trainingData[i]), matrix(trainingData[j]), sigma) for j in range(M)] for i in range(M)]
+Y = [1] * M_pos + [-1] * M_neg
+# print K_matrix
 print kernalPerceptron(trainingData, K_matrix, Y)
 
 ##### testing

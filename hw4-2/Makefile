@@ -1,2 +1,2 @@
 all:
-	python kerpercep.py 1.0 positive_training_data_prob2_1.txt negative_training_data_prob2_1.txt positive_testing_data_prob2_1.txt negative_testing_data_prob2_2.txt
+	python kerpercep.py 1.0 positive_training_data_prob2_2.txt negative_training_data_prob2_2.txt positive_testing_data_prob2_2.txt negative_testing_data_prob2_2.txt
