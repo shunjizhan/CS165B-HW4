@@ -10,10 +10,20 @@ def readFile(filename):
   return lines
 
 def K(x1, x2, sigma):
-  return exp(-2.0 * ((x1-x2) * (x1-x2).T) / sigma**2)
+  return exp(-1.0 * ((x1-x2) * (x1-x2).T) / 2.0 * sigma**2)
 
-def KernalPerceptron(D, K):
-  return
+def kernalPerceptron(D, K, Y):
+  n = len(D)
+  a = [0] * n
+  converged = False
+  while(converged == False):
+    converged = True
+    for i in range(n):
+      print K[i][j]
+      # if (Y[i] * sum([a[j] * Y[j] * K[i][j] for j in range(n)]) <= 0):
+      #   a[i] = a[i] + 1
+      #   converged = False
+  return a
 
 ##### training
 sigma = float(sys.argv[1])
@@ -33,7 +43,9 @@ trainingData_neg = trainingData_neg[1:]
 trainingData = trainingData_pos + trainingData_neg
 
 K_matrix = [[K(matrix(trainingData[i]), matrix(trainingData[j]), sigma) for j in range(10)] for i in range(10)]
+Y = [1] * M_pos + [0] * M_neg
 print K_matrix
+print kernalPerceptron(trainingData, K_matrix, Y)
 
 ##### testing
 testingData_pos = readFile(sys.argv[2])
